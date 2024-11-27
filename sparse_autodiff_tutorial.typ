@@ -4,7 +4,7 @@
 #set text(size: 30pt)
 
 #let juliablue = rgb("#4063d8")
-#show link: underline
+#show link: set text(blue)
 
 #show: university-theme.with(
   short-author: "G. Dalle",
@@ -45,7 +45,7 @@
       ),
 
       [program to compute the function $ x arrow.r.bar.long f(x) $],
-      [program to compute the derivative \ (linear operator) $ x arrow.r.bar.long partial f(x) $],
+      [program to compute the derivative $ x arrow.r.bar.long partial f(x) $],
     )
   ]
 
@@ -85,14 +85,14 @@
   Reverse-mode AD computes Vector-Jacobian Products:
 
   $
-    w arrow.r.bar.long quad & partial f(x)^* [w]
+    w arrow.r.bar.long quad & partial f(x)^* [w] = w^* partial f(x)
   $
 
   No need to materialize intermediate Jacobian matrices!
 ]
 
 #focus-slide(background-color: juliablue)[
-  Cost of 1 JVP or VJP for $f$ $approx$ \ cost of 1 evaluation of $f$.
+  Cost of 1 JVP or VJP for $f$ $prop$ \ cost of 1 evaluation of $f$.
 ]
 
 #slide(title: [From operators to matrices], new-section: [Leveraging sparsity])[
@@ -167,16 +167,12 @@
   The preparation phase can be amortized across several inputs.
 ]
 
-#slide(title: [Operator overloading], new-section: [Structure detection])[
-
-]
-
 #slide(title: [Partitions for matrix $A$], new-section: [Coloring])[
   / Orthogonal: for all $(i, j)$ s.t. $A_(i j) != 0$,
-    - column $j$ is the only one of its group with a nonzero in row $i$
+    - column $j$ is alone in group $c(j)$ with a nonzero in row $i$
   / Symmetrically orthogonal: for all $(i, j)$ s.t. $A_(i j) != 0$,
-    - column $j$ is the only one of its group with a nonzero in row $i$ OR
-    - OR column $i$ is the only one of its group with a nonzero in row $j$
+    - either column $j$ is alone in group $c(j)$ with a nonzero in row $i$
+    - or column $i$ is alone in group $c(i)$ with a nonzero in row $j$
 
   Each partition can be reformulated as a specific coloring problem.
 ]
@@ -208,7 +204,29 @@
 ]
 
 #slide(title: [Hessian coloring (2)])[
-  Why a star coloring?
+  #columns(2)[
+    Why a "star" coloring? Consider
+
+    $
+      A = mat(
+        A_(k k), A_(k i), dot, dot;
+        A_(i k), A_(i i), A_(i j), dot;
+        dot, A_(j i), A_(j j), A_(j l);
+        dot, dot, A_(l j), A_(l l);
+      )
+    $
+
+    #colbreak()
+
+    If coloring $c$ yields a symmetrically orthogonal partition:
+
+    - $c(i) != c(j)$
+    - $c(i) != c(k)$
+    - $c(j) != c(l)$
+  ]
+
+  Any path on 4 vertices must use at least 3 colors
+  $arrow.l.r.double.long$ any 2-colored subgraph is a collection of disjoint stars.
 ]
 
 #slide(title: [Jacobian bicoloring])[
@@ -220,33 +238,66 @@
 ]
 
 #slide(title: [New insights on Jacobian bicoloring])[
-  1. A bicoloring of $J$ is given by a star coloring of $H = mat(0, J; J^T, 0)$
-  2. Diagonal of $H$ is zero: relax star coloring into _no zig-zag coloring_ $arrow.r.double.long$ no path on 4 vertices can have colors $(c_1, c_2, c_1, c_2)$
+  1. A bicoloring of $J$ is given by a star coloring of $H = mat(0, J; J^T, 0)$: we can reuse existing algorithms
+  2. Diagonal of $H$ is now all zero: we can relax star coloring into _no zig-zag coloring_
+
+  #columns(2)[
+    $
+      A = mat(
+        dot, A_(k i), dot, dot;
+        A_(i k), dot, A_(i j), dot;
+        dot, A_(j i), dot, A_(j l);
+        dot, dot, A_(l j), dot;
+      )
+    $
+
+    #colbreak()
+
+    No path on 4 vertices can have colors $(c_1, c_2, c_1, c_2)$.
+  ]
 ]
 
 #slide(title: [A high-level sparse AD ecosystem], new-section: [Implementations])[
+  Independent packages working together:
   - Step 1 (structure detection): #link("https://github.com/adrhill/SparseConnectivityTracer.jl")[`SparseConnectivityTracer.jl`]
   - Steps 2 & 4 (coloring, decompression): #link("https://github.com/gdalle/SparseMatrixColorings.jl")[`SparseMatrixColorings.jl`]
-  - Step 3 (compressed diffeentiation): #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`DifferentiationInterface.jl`]
+  - Step 3 (compressed diffeentiation): #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`Differentiationterface.jl`]
 
-  #align(center)[
+  #columns(2)[
     #image("assets/img/logo.svg", height: 60%)
+    #image("assets/img/stars_github.png", height: 100%)
   ]
 ]
 
 #slide(title: [Impact])[
-  `DifferentiationInterface.jl` has
-  
-  - 11 months of age
-  - 14430 lines of Julia code
-  - 200 stars on GitHub
-  - 392 indirect dependents
-  - around 19k downloads per month (excluding bots)
+  #align(center)[
+    #table(
+      columns: (auto, auto, auto, auto),
+      inset: 10pt,
+      align: left,
+      table.header(
+        [],
+        [*`SCT.jl`*],
+        [*`SMC.jl`*],
+        [*`DI.jl`*],
+      ),
+      [lines of code], [4719], [3600], [14332],
+      [indirect dependents], [387], [350], [345],
+      [downloads / month], [10k], [17k], [19k],
+    )
+  ]
+
+  Users already include...
+
+  - Scientific computing: #link("https://sciml.ai/")[SciML] (Julia's `scipy`)
+    - Differential equations, nonlinear solves, optimization
+  - Probabilistic programming: #link("https://turinglang.org/")[`Turing.jl`]
+  - Symbolic regression: #link("https://github.com/MilesCranmer/PySR")[`PySR`]
 ]
 
 #slide(title: [Perspectives])[
   - GPU-compatible structure detection and coloring
-  - Pure Julia autodiff engine based on SSA-IR
+  - Pure Julia autodiff engine based on SSA-IR (#link("https://github.com/compintell/Mooncake.jl")[`Mooncake.jl`])
 ]
 
 #slide(title: [Going further], new-section: [Appendix])[
