@@ -1,0 +1,306 @@
+@misc{abadiTensorFlowLargescaleMachine2015,
+  title = {TensorFlow: Large-scale machine learning on heterogeneous systems},
+  author = {Abadi, Mart{\'i}n and Agarwal, Ashish and Barham, Paul and Brevdo, Eugene and Chen, Zhifeng and Citro, Craig and Corrado, Greg S. and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Goodfellow, Ian and Harp, Andrew and Irving, Geoffrey and Isard, Michael and Jia, Yangqing and Jozefowicz, Rafal and Kaiser, Lukasz and Kudlur, Manjunath and Levenberg, Josh and Man{\'e}, Dandelion and Monga, Rajat and Moore, Sherry and Murray, Derek and Olah, Chris and Schuster, Mike and Shlens, Jonathon and Steiner, Benoit and Sutskever, Ilya and Talwar, Kunal and Tucker, Paul and Vanhoucke, Vincent and Vasudevan, Vijay and Vi{\'e}gas, Fernanda and Vinyals, Oriol and Warden, Pete and Wattenberg, Martin and Wicke, Martin and Yu, Yuan and Zheng, Xiaoqiang},
+  year = {2015},
+  url = {https://www.tensorflow.org/}
+}
+
+@article{baydinAutomaticDifferentiationMachine2018,
+  title = {Automatic Differentiation in Machine Learning: a Survey},
+  shorttitle = {Automatic Differentiation in Machine Learning},
+  author = {Baydin, Atilim Gunes and Pearlmutter, Barak A. and Radul, Alexey Andreyevich and Siskind, Jeffrey Mark},
+  year = {2018},
+  journal = {Journal of Machine Learning Research},
+  volume = {18},
+  number = {153},
+  pages = {1--43},
+  issn = {1533-7928},
+  url = {http://jmlr.org/papers/v18/17-468.html},
+  abstract = {Derivatives, mostly in the form of gradients and Hessians, are ubiquitous in machine learning. Automatic differentiation (AD), also called algorithmic differentiation or simply "autodiff", is a family of techniques similar to but more general than backpropagation for efficiently and accurately evaluating derivatives of numeric functions expressed as computer programs. AD is a small but established field with applications in areas including computational fluid dynamics, atmospheric sciences, and engineering design optimization. Until very recently, the fields of machine learning and AD have largely been unaware of each other and, in some cases, have independently discovered each other's results. Despite its relevance, general-purpose AD has been missing from the machine learning toolbox, a situation slowly changing with its ongoing adoption under the names "dynamic computational graphs" and "differentiable programming". We survey the intersection of AD and machine learning, cover applications where AD has direct relevance, and address the main implementation techniques. By precisely defining the main differentiation techniques and their interrelationships, we aim to bring clarity to the usage of the terms "autodiff", "automatic differentiation", and "symbolic differentiation" as these are encountered more and more in machine learning settings.}
+}
+
+@article{bezansonJuliaFreshApproach2017,
+  title = {Julia: A Fresh Approach to Numerical Computing},
+  shorttitle = {Julia},
+  author = {Bezanson, Jeff and Edelman, Alan and Karpinski, Stefan and Shah, Viral B.},
+  year = {2017},
+  month = jan,
+  journal = {SIAM Review},
+  volume = {59},
+  number = {1},
+  pages = {65--98},
+  issn = {0036-1445, 1095-7200},
+  doi = {10.1137/141000671},
+  url = {https://epubs.siam.org/doi/10.1137/141000671},
+  langid = {english}
+}
+
+@inproceedings{blondelEfficientModularImplicit2022,
+  title = {Efficient and Modular Implicit Differentiation},
+  booktitle = {Advances in Neural Information Processing Systems},
+  author = {Blondel, Mathieu and Berthet, Quentin and Cuturi, Marco and Frostig, Roy and Hoyer, Stephan and {Llinares-Lopez}, Felipe and Pedregosa, Fabian and Vert, Jean-Philippe},
+  year = {2022},
+  month = dec,
+  volume = {35},
+  pages = {5230--5242},
+  url = {https://proceedings.neurips.cc/paper_files/paper/2022/hash/228b9279ecf9bbafe582406850c57115-Abstract-Conference.html},
+  langid = {english}
+}
+
+@misc{blondelElementsDifferentiableProgramming2024,
+  title = {The Elements of Differentiable Programming},
+  author = {Blondel, Mathieu and Roulet, Vincent},
+  year = {2024},
+  month = jul,
+  number = {arXiv:2403.14606},
+  eprint = {2403.14606},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2403.14606},
+  url = {http://arxiv.org/abs/2403.14606},
+  abstract = {Artificial intelligence has recently experienced remarkable advances, fueled by large models, vast datasets, accelerated hardware, and, last but not least, the transformative power of differentiable programming. This new programming paradigm enables end-to-end differentiation of complex computer programs (including those with control flows and data structures), making gradient-based optimization of program parameters possible. As an emerging paradigm, differentiable programming builds upon several areas of computer science and applied mathematics, including automatic differentiation, graphical models, optimization and statistics. This book presents a comprehensive review of the fundamental concepts useful for differentiable programming. We adopt two main perspectives, that of optimization and that of probability, with clear analogies between the two. Differentiable programming is not merely the differentiation of programs, but also the thoughtful design of programs intended for differentiation. By making programs differentiable, we inherently introduce probability distributions over their execution, providing a means to quantify the uncertainty associated with program outputs.},
+  archiveprefix = {arXiv}
+}
+
+@inproceedings{bolteMathematicalModelAutomatic2020,
+  title = {A mathematical model for automatic differentiation in machine learning},
+  booktitle = {Conference on Neural Information Processing Systems},
+  author = {Bolte, Jerome and Pauwels, Edouard},
+  year = {2020},
+  month = dec,
+  address = {Vancouver, Canada},
+  url = {https://hal.archives-ouvertes.fr/hal-02734446},
+  abstract = {Automatic differentiation, as implemented today, does not have a simple mathematical model adapted to the needs of modern machine learning. In this work we articulate the relationships between differentiation of programs as implemented in practice and differentiation of nonsmooth functions. To this end we provide a simple class of functions, a nonsmooth calculus, and show how they apply to stochastic approximation methods. We also evidence the issue of artificial critical points created by algorithmic differentiation and show how usual methods avoid these points with probability one.}
+}
+
+@misc{bradburyJAXComposableTransformations2018,
+  title = {JAX: composable transformations of Python+NumPy programs},
+  author = {Bradbury, James and Frostig, Roy and Hawkins, Peter and Johnson, Matthew James and Leary, Chris and Maclaurin, Dougal and Necula, George and Paszke, Adam and VanderPlas, Jake and {Wanderman-Milne}, Skye and Zhang, Qiao},
+  year = {2018},
+  url = {http://github.com/google/jax}
+}
+
+@article{colemanEstimationSparseHessian1984,
+  title = {Estimation of sparse hessian matrices and graph coloring problems},
+  author = {Coleman, Thomas F. and Mor{\'e}, Jorge J.},
+  year = {1984},
+  month = oct,
+  journal = {Mathematical Programming},
+  volume = {28},
+  number = {3},
+  pages = {243--270},
+  issn = {1436-4646},
+  doi = {10.1007/BF02612334},
+  url = {https://doi.org/10.1007/BF02612334},
+  abstract = {Large scale optimization problems often require an approximation to the Hessian matrix. If the Hessian matrix is sparse then estimation by differences of gradients is attractive because the number of required differences is usually small compared to the dimension of the problem. The problem of estimating Hessian matrices by differences can be phrased as follows: Given the sparsity structure of a symmetric matrixA, obtain vectorsd1,d2, {\dots}dp such thatAd1,Ad2, {\dots}Adp determineA uniquely withp as small as possible. We approach this problem from a graph theoretic point of view and show that both direct and indirect approaches to this problem have a natural graph coloring interpretation. The complexity of the problem is analyzed and efficient practical heuristic procedures are developed. Numerical results illustrate the differences between the various approaches.},
+  langid = {english}
+}
+
+@article{curtisEstimationSparseJacobian1974,
+  title = {On the Estimation of Sparse Jacobian Matrices},
+  author = {Curtis, A. R. and Powell, M. J. D. and Reid, J. K.},
+  year = {1974},
+  month = feb,
+  journal = {IMA Journal of Applied Mathematics},
+  volume = {13},
+  number = {1},
+  pages = {117--119},
+  issn = {0272-4960},
+  doi = {10.1093/imamat/13.1.117},
+  url = {https://doi.org/10.1093/imamat/13.1.117},
+  abstract = {We show how to use known constant elements in a Jacobian matrix to reduce the work required to estimate the remaining elements by finite differences.}
+}
+
+@inproceedings{dagreouHowComputeHessianvector2024,
+  title = {How to compute Hessian-vector products?},
+  booktitle = {The Third Blogpost Track at ICLR 2024},
+  author = {Dagr{\'e}ou, Mathieu and Ablin, Pierre and Vaiter, Samuel and Moreau, Thomas},
+  year = {2024},
+  month = feb,
+  url = {https://openreview.net/forum?id=rTgjQtGP3O},
+  abstract = {The products between the Hessian of a function and a vector, so-called Hessian-vector product (HVPs) is a quantity that appears in optimization and machine learning. However, the computation of HVPs is often considered prohibitive, preventing practitioners from using algorithms that rely on these quantities. Standard automatic differentiation theory predicts that computing a HVP has a cost of the same order of magnitude as computing a gradient. The goal of this blog post is to provide a practical counterpart to this theoretical result, showing that modern automatic differentiation frameworks, Jax and Pytorch, allow for efficient computation of these HVPs in standard deep learning cost functions.},
+  langid = {english}
+}
+
+@article{gebremedhinEfficientComputationSparse2009,
+  title = {Efficient Computation of Sparse Hessians Using Coloring and Automatic Differentiation},
+  author = {Gebremedhin, Assefaw H. and Tarafdar, Arijit and Pothen, Alex and Walther, Andrea},
+  year = {2009},
+  month = may,
+  journal = {INFORMS Journal on Computing},
+  volume = {21},
+  number = {2},
+  pages = {209--223},
+  publisher = {INFORMS},
+  issn = {1091-9856},
+  doi = {10.1287/ijoc.1080.0286},
+  url = {https://pubsonline.informs.org/doi/abs/10.1287/ijoc.1080.0286},
+  abstract = {The computation of a sparse Hessian matrix H using automatic differentiation (AD) can be made efficient using the following four-step procedure: (1) Determine the sparsity structure of H, (2) obtain a seed matrix S that defines a column partition of H using a specialized coloring on the adjacency graph of H, (3) compute the compressed Hessian matrix B {$\equiv$} HS, and (4) recover the numerical values of the entries of H from B. The coloring variant used in the second step depends on whether the recovery in the fourth step is direct or indirect: a direct method uses star coloring and an indirect method uses acyclic coloring. In an earlier work, we had designed and implemented effective heuristic algorithms for these two NP-hard coloring problems. Recently, we integrated part of the developed software with the AD tool ADOL-C, which has recently acquired a sparsity detection capability. In this paper, we provide a detailed description and analysis of the recovery algorithms and experimentally demonstrate the efficacy of the coloring techniques in the overall process of computing the Hessian of a given function using ADOL-C as an example of an AD tool. We also present new analytical results on star and acyclic coloring of chordal graphs. The experimental results show that sparsity exploitation via coloring yields enormous savings in runtime and makes the computation of Hessians of very large size feasible. The results also show that evaluating a Hessian via an indirect method is often faster than a direct evaluation. This speedup is achieved without compromising numerical accuracy.}
+}
+
+@article{gebremedhinNewAcyclicStar2007,
+  title = {New Acyclic and Star Coloring Algorithms with Application to Computing Hessians},
+  author = {Gebremedhin, Assefaw H. and Tarafdar, Arijit and Manne, Fredrik and Pothen, Alex},
+  year = {2007},
+  month = jan,
+  journal = {SIAM Journal on Scientific Computing},
+  volume = {29},
+  number = {3},
+  pages = {1042--1072},
+  publisher = {{Society for Industrial and Applied Mathematics}},
+  issn = {1064-8275},
+  doi = {10.1137/050639879},
+  url = {https://epubs.siam.org/doi/abs/10.1137/050639879},
+  abstract = {It is proved that every graph embedded in a fixed surface with sufficiently large edge-width is acyclically 7-colorable and that its star chromatic number is at most \$2s\_0{\textasciicircum}*+3\$, where \$s\_0{\textasciicircum}*{\textbackslash}leq20\$ is the maximum star chromatic number for the class of all planar graphs.}
+}
+
+@article{gebremedhinWhatColorYour2005,
+  title = {What Color Is Your Jacobian? Graph Coloring for Computing Derivatives},
+  shorttitle = {What Color Is Your Jacobian?},
+  author = {Gebremedhin, Assefaw Hadish and Manne, Fredrik and Pothen, Alex},
+  year = {2005},
+  month = jan,
+  journal = {SIAM Review},
+  volume = {47},
+  number = {4},
+  pages = {629--705},
+  publisher = {{Society for Industrial and Applied Mathematics}},
+  issn = {0036-1445},
+  doi = {10/cmwds4},
+  url = {https://epubs.siam.org/doi/abs/10.1137/S0036144504444711},
+  abstract = {Graph coloring has been employed since the 1980s to efficiently compute sparse Jacobian and Hessian matrices using either finite differences or automatic differentiation. Several coloring problems occur in this context, depending on whether the matrix is a Jacobian or a Hessian, and on the specifics of the computational techniques employed. We consider eight variant vertex coloring problems here. This article begins with a gentle introduction to the problem of computing a sparse Jacobian, followed by an overview of the historical development of the research area. Then we present a unifying framework for the graph models of the variant matrix estimation problems. The framework is based upon the viewpoint that a partition of a matrix into structurally orthogonal groups of columns corresponds to distance-2 coloring an appropriate graph representation. The unified framework helps integrate earlier work and leads to fresh insights; enables the design of more efficient algorithms for many problems; leads to new algorithms for others; and eases the task of building graph models for new problems. We report computational results on two of the coloring problems to support our claims. Most of the methods for these problems treat a column or a row of a matrix as an atomic entity, and partition the columns or rows (or both). A brief review of methods that do not fit these criteria is provided. We also discuss results in discrete mathematics and theoretical computer science that intersect with the topics considered here.}
+}
+
+@book{griewankEvaluatingDerivativesPrinciples2008,
+  title = {Evaluating derivatives: principles and techniques of algorithmic differentiation},
+  shorttitle = {Evaluating derivatives},
+  author = {Griewank, Andreas and Walther, Andrea},
+  year = {2008},
+  edition = {2nd ed},
+  publisher = {{Society for Industrial and Applied Mathematics}},
+  address = {Philadelphia, PA},
+  url = {https://epubs.siam.org/doi/book/10.1137/1.9780898717761},
+  abstract = {This title is a comprehensive treatment of algorithmic, or automatic, differentiation. The second edition covers recent developments in applications and theory, including an elegant NP completeness argument and an introduction to scarcity},
+  isbn = {978-0-89871-659-7},
+  lccn = {QA304 .G76 2008},
+  annotation = {OCLC: ocn227574816}
+}
+
+@misc{hillSparserBetterFaster2025,
+  title = {Sparser, Better, Faster, Stronger: Efficient Automatic Differentiation for Sparse Jacobians and Hessians},
+  shorttitle = {Sparser, Better, Faster, Stronger},
+  author = {Hill, Adrian and Dalle, Guillaume},
+  year = {2025},
+  month = jan,
+  number = {arXiv:2501.17737},
+  eprint = {2501.17737},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2501.17737},
+  url = {http://arxiv.org/abs/2501.17737},
+  abbr = {Preprint},
+  abstract = {From implicit differentiation to probabilistic modeling, Jacobians and Hessians have many potential use cases in Machine Learning (ML), but conventional wisdom views them as computationally prohibitive. Fortunately, these matrices often exhibit sparsity, which can be leveraged to significantly speed up the process of Automatic Differentiation (AD). This paper presents advances in Automatic Sparse Differentiation (ASD), starting with a new perspective on sparsity detection. Our refreshed exposition is based on operator overloading, able to detect both local and global sparsity patterns, and naturally avoids dead ends in the control flow graph. We also describe a novel ASD pipeline in Julia, consisting of independent software packages for sparsity detection, matrix coloring, and differentiation, which together enable ASD based on arbitrary AD backends. Our pipeline is fully automatic and requires no modification of existing code, making it compatible with existing ML codebases. We demonstrate that this pipeline unlocks Jacobian and Hessian matrices at scales where they were considered too expensive to compute. On real-world problems from scientific ML and optimization, we show significant speed-ups of up to three orders of magnitude. Notably, our ASD pipeline often outperforms standard AD for one-off computations, once thought impractical due to slower sparsity detection methods.},
+  archiveprefix = {arXiv},
+  code = {https://github.com/adrhill/SparseConnectivityTracer.jl}
+}
+
+@misc{huckelheimUnderstandingAutomaticDifferentiation2023,
+  title = {Understanding Automatic Differentiation Pitfalls},
+  author = {H{\"u}ckelheim, Jan and Menon, Harshitha and Moses, William and Christianson, Bruce and Hovland, Paul and Hasco{\"e}t, Laurent},
+  year = {2023},
+  month = may,
+  number = {arXiv:2305.07546},
+  eprint = {2305.07546},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2305.07546},
+  url = {http://arxiv.org/abs/2305.07546},
+  abstract = {Automatic differentiation, also known as backpropagation, AD, autodiff, or algorithmic differentiation, is a popular technique for computing derivatives of computer programs accurately and efficiently. Sometimes, however, the derivatives computed by AD could be interpreted as incorrect. These pitfalls occur systematically across tools and approaches. In this paper we broadly categorize problematic usages of AD and illustrate each category with examples such as chaos, time-averaged oscillations, discretizations, fixed-point loops, lookup tables, and linear solvers. We also review debugging techniques and their effectiveness in these situations. With this article we hope to help readers avoid unexpected behavior, detect problems more easily when they occur, and have more realistic expectations from AD tools.},
+  archiveprefix = {arXiv}
+}
+
+@article{mandiDecisionFocusedLearningFoundations2024,
+  title = {Decision-Focused Learning: Foundations, State of the Art, Benchmark and Future Opportunities},
+  shorttitle = {Decision-Focused Learning},
+  author = {Mandi, Jayanta and Kotary, James and Berden, Senne and Mulamba, Maxime and Bucarey, Victor and Guns, Tias and Fioretto, Ferdinando},
+  year = {2024},
+  month = aug,
+  journal = {Journal of Artificial Intelligence Research},
+  volume = {80},
+  pages = {1623--1701},
+  issn = {1076-9757},
+  doi = {10.1613/jair.1.15320},
+  url = {https://www.jair.org/index.php/jair/article/view/15320},
+  abstract = {Decision-focused learning (DFL) is an emerging paradigm that integrates machine learning (ML) and constrained optimization to enhance decision quality by training ML models in an end-to-end system. This approach shows significant potential to revolutionize combinatorial decision-making in real-world applications that operate under uncertainty, where estimating unknown parameters within decision models is a major challenge. This paper presents a comprehensive review of DFL, providing an in-depth analysis of both gradient-based and gradient-free techniques used to combine ML and constrained optimization. It evaluates the strengths and limitations of these techniques and includes an extensive empirical evaluation of eleven methods across seven problems. The survey also offers insights into recent advancements and future research directions in DFL.},
+  copyright = {Copyright (c) 2024 Journal of Artificial Intelligence Research},
+  langid = {english}
+}
+
+@article{margossianReviewAutomaticDifferentiation2019,
+  title = {A review of automatic differentiation and its efficient implementation},
+  author = {Margossian, Charles C.},
+  year = {2019},
+  journal = {WIREs Data Mining and Knowledge Discovery},
+  volume = {9},
+  number = {4},
+  pages = {e1305},
+  issn = {1942-4795},
+  doi = {10.1002/widm.1305},
+  url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/widm.1305},
+  abstract = {Derivatives play a critical role in computational statistics, examples being Bayesian inference using Hamiltonian Monte Carlo sampling and the training of neural networks. Automatic differentiation (AD) is a powerful tool to automate the calculation of derivatives and is preferable to more traditional methods, especially when differentiating complex algorithms and mathematical functions. The implementation of AD, however, requires some care to insure efficiency. Modern differentiation packages deploy a broad range of computational techniques to improve applicability, run time, and memory management. Among these techniques are operation overloading, region-based memory, and expression templates. There also exist several mathematical techniques which can yield high performance gains when applied to complex algorithms. For example, semi-analytical derivatives can reduce by orders of magnitude the runtime required to numerically solve and differentiate an algebraic equation. Open and practical problems include the extension of current packages to provide more specialized routines, and finding optimal methods to perform higher-order differentiation. This article is categorized under: Algorithmic Development {$>$} Scalable Statistical Methods},
+  langid = {english}
+}
+
+@article{mohamedMonteCarloGradient2020,
+  title = {Monte Carlo Gradient Estimation in Machine Learning},
+  author = {Mohamed, Shakir and Rosca, Mihaela and Figurnov, Michael and Mnih, Andriy},
+  year = {2020},
+  journal = {Journal of Machine Learning Research},
+  volume = {21},
+  number = {132},
+  pages = {1--62},
+  issn = {1533-7928},
+  url = {http://jmlr.org/papers/v21/19-346.html},
+  abstract = {This paper is a broad and accessible survey of the methods we have at our disposal for Monte Carlo gradient estimation in machine learning and across the statistical sciences: the problem of computing the gradient of an expectation of a function with respect to parameters defining the distribution that is integrated; the problem of sensitivity analysis. In machine learning research, this gradient problem lies at the core of many learning problems, in supervised, unsupervised and reinforcement learning. We will generally seek to rewrite such gradients in a form that allows for Monte Carlo estimation, allowing them to be easily and efficiently used and analysed. We explore three strategies---the pathwise, score function, and measure-valued gradient estimators---exploring their historical development, derivation, and underlying assumptions. We describe their use in other fields, show how they are related and can be combined, and expand on their possible generalisations. Wherever Monte Carlo gradient estimators have been derived and deployed in the past, important advances have followed. A deeper and more widely-held understanding of this problem will lead to further advances, and it is these advances that we wish to support.}
+}
+
+@inproceedings{paszkePyTorchImperativeStyle2019,
+  title = {PyTorch: An Imperative Style, High-Performance Deep Learning Library},
+  shorttitle = {PyTorch},
+  booktitle = {Advances in Neural Information Processing Systems},
+  author = {Paszke, Adam and Gross, Sam and Massa, Francisco and Lerer, Adam and Bradbury, James and Chanan, Gregory and Killeen, Trevor and Lin, Zeming and Gimelshein, Natalia and Antiga, Luca and Desmaison, Alban and Kopf, Andreas and Yang, Edward and DeVito, Zachary and Raison, Martin and Tejani, Alykhan and Chilamkurthy, Sasank and Steiner, Benoit and Fang, Lu and Bai, Junjie and Chintala, Soumith},
+  year = {2019},
+  volume = {32},
+  publisher = {Curran Associates, Inc.},
+  url = {https://proceedings.neurips.cc/paper/2019/hash/bdbca288fee7f92f2bfa9f7012727740-Abstract.html},
+  abstract = {Deep learning frameworks have often focused on either usability or speed, but not both. PyTorch is a machine learning library that shows that these two goals are in fact compatible: it was designed from first principles to support an imperative and Pythonic programming style that supports code as a model, makes debugging easy and is consistent with other popular scientific computing libraries, while remaining efficient and supporting hardware accelerators such as GPUs. In this paper, we detail the principles that drove the implementation of PyTorch and how they are reflected in its architecture. We emphasize that every aspect of PyTorch is a regular Python program under the full control of its user. We also explain how the careful and pragmatic implementation of the key components of its runtime enables them to work together to achieve compelling performance. We demonstrate the efficiency of individual subsystems, as well as the overall speed of PyTorch on several commonly used benchmarks.}
+}
+
+@misc{sapienzaDifferentiableProgrammingDifferential2024,
+  title = {Differentiable Programming for Differential Equations: A Review},
+  shorttitle = {Differentiable Programming for Differential Equations},
+  author = {Sapienza, Facundo and Bolibar, Jordi and Sch{\"a}fer, Frank and Groenke, Brian and Pal, Avik and Boussange, Victor and Heimbach, Patrick and Hooker, Giles and P{\'e}rez, Fernando and Persson, Per-Olof and Rackauckas, Christopher},
+  year = {2024},
+  month = jun,
+  number = {arXiv:2406.09699},
+  eprint = {2406.09699},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2406.09699},
+  url = {http://arxiv.org/abs/2406.09699},
+  abstract = {The differentiable programming paradigm is a cornerstone of modern scientific computing. It refers to numerical methods for computing the gradient of a numerical model's output. Many scientific models are based on differential equations, where differentiable programming plays a crucial role in calculating model sensitivities, inverting model parameters, and training hybrid models that combine differential equations with data-driven approaches. Furthermore, recognizing the strong synergies between inverse methods and machine learning offers the opportunity to establish a coherent framework applicable to both fields. Differentiating functions based on the numerical solution of differential equations is non-trivial. Numerous methods based on a wide variety of paradigms have been proposed in the literature, each with pros and cons specific to the type of problem investigated. Here, we provide a comprehensive review of existing techniques to compute derivatives of numerical solutions of differential equations. We first discuss the importance of gradients of solutions of differential equations in a variety of scientific domains. Second, we lay out the mathematical foundations of the various approaches and compare them with each other. Third, we cover the computational considerations and explore the solutions available in modern scientific software. Last but not least, we provide best-practices and recommendations for practitioners. We hope that this work accelerates the fusion of scientific models and data, and fosters a modern approach to scientific modelling.},
+  archiveprefix = {arXiv}
+}
+
+@article{waltherComputingSparseHessians2008,
+  title = {Computing sparse Hessians with automatic differentiation},
+  author = {Walther, Andrea},
+  year = {2008},
+  month = jan,
+  journal = {ACM Transactions on Mathematical Software},
+  volume = {34},
+  number = {1},
+  pages = {3:1--3:15},
+  issn = {0098-3500},
+  doi = {10.1145/1322436.1322439},
+  url = {https://dl.acm.org/doi/10.1145/1322436.1322439},
+  abstract = {A new approach for computing a sparsity pattern for a Hessian is presented: nonlinearity information is propagated through the function evaluation yielding the nonzero structure. A complexity analysis of the proposed algorithm is given. Once the sparsity pattern is available, coloring algorithms can be applied to compute a seed matrix. To evaluate the product of the Hessian and the seed matrix, a vector version for evaluating second order adjoints is analysed. New drivers of ADOL-C are provided implementing the presented algorithms. Runtime analyses are given for some problems of the CUTE collection.}
+}

@@ -132,7 +132,7 @@
 
 #slide(title: [Compression])[
   #figure(
-    image("assets/img/survey/compression.png", height: 90%),
+    image("../assets/img/survey/compression.png", height: 90%),
     caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
   )
 ]
@@ -182,7 +182,7 @@
   / Bipartite: $(i, j) in cal(E) arrow.l.r.double.long A_(i j) != 0$ (2 vertex sets $cal(I)$ and $cal(J)$)
   / Adjacency (sym.): $(i, j) in cal(E) arrow.l.r.double.long i != j$ & $A_(i j) != 0$
   #figure(
-    image("assets/img/survey/bipartite_column_2.png", width: 80%),
+    image("../assets/img/survey/bipartite_column_2.png", width: 80%),
     caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
   )
 ]
@@ -190,7 +190,7 @@
 #slide(title: [Jacobian coloring])[
   Coloring of intersection graph / distance-2 coloring of bipartite graph
   #figure(
-    image("assets/img/survey/bipartite_column_full.png", width: 100%),
+    image("../assets/img/survey/bipartite_column_full.png", width: 100%),
     caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
   )
 ]
@@ -198,7 +198,7 @@
 #slide(title: [Hessian coloring])[
   Star coloring of adjacency graph
   #figure(
-    image("assets/img/survey/star_coloring.png", width: 70%),
+    image("../assets/img/survey/star_coloring.png", width: 70%),
     caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
   )
 ]
@@ -232,7 +232,7 @@
 #slide(title: [Jacobian bicoloring])[
   Bidirectional coloring of bipartite graph, with neutral color
   #figure(
-    image("assets/img/survey/bicoloring.png", width: 80%),
+    image("../assets/img/survey/bicoloring.png", width: 80%),
     caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
   )
 ]
@@ -264,8 +264,8 @@
   - Step 3 (compressed diffeentiation): #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`Differentiationterface.jl`]
 
   #columns(2)[
-    #image("assets/img/logo.svg", height: 60%)
-    #image("assets/img/stars_github.png", height: 100%)
+    #image("../assets/img/logo.svg", height: 60%)
+    #image("../assets/img/stars_github.png", height: 100%)
   ]
 ]
 
@@ -315,5 +315,5 @@
 ]
 
 #slide(title: [Bibliography])[
-  #bibliography("assets/bib/sparsead.bib", title: none, style: "apa")
+  #bibliography("sparsead.bib", title: none, style: "apa")
 ]
