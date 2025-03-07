@@ -9,7 +9,6 @@
   text-size: 23pt,
   // footer: [Sparse automatic differentiation -- G. Dalle], // defaults to none
 )
-
 #slide[
   #set page(header: none, footer: none, margin: 3em, fill: white)
 
@@ -22,9 +21,9 @@
   #metropolis.divider
 
   #set text(size: .8em, weight: "light")
-  Guillaume Dalle (LVMT, École des Ponts) -- #link("https://gdalle.github.io")[gdalle.github.io]
+  *Guillaume Dalle*#footnote(numbering: "*")[#text(size: 14pt)[joint work with Adrian Hill & Alexis Montoison]] -- LVMT, École des Ponts (#link("https://gdalle.github.io")[`gdalle.github.io`])
 
-  Inria, 07.03.2025
+  Inria Paris, 07.03.2025
 ]
 
 #slide[
