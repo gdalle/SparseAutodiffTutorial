@@ -96,6 +96,45 @@
 
 #new-section[Automatic differentiation]
 
+
+#slide[
+  = Pocket AD
+
+  #only(1)[
+    ```julia
+    import Base: +, *  # overload standard operators
+
+    struct Dual
+        val::Float64
+        der::Float64
+    end
+
+    +(x::Dual, y::Dual) = Dual(x.val + y.val, x.der + y.der)
+    *(x::Dual, y::Dual) = Dual(x.val * y.val, x.der*y.val + x.val*y.der)
+    +(x, y::Dual) = Dual(x, 0) + y
+    *(x, y::Dual) = Dual(x, 0) * y
+    ```
+  ]
+
+  #only(2)[
+
+    Does it work?
+
+    ```julia
+    julia> f(x) = 1 + 2 * x + 3 * x * x;
+
+    julia> f(4)
+    57
+
+    julia> f(Dual(4, 1))  # exact derivative
+    Dual(57.0, 26.0)
+
+    julia> (f(4 + 1e-5) - f(4)) / 1e-5  # approximate derivative
+    26.000029998840542
+    ```
+  ]
+]
+
 #slide[
   = What is AD?
 
@@ -172,33 +211,9 @@
   No need to materialize intermediate Jacobian matrices!
 ]
 
-
 #slide[
   #show: focus
   Theorem: cost of 1 JVP or VJP \ $prop$ cost of 1 function evaluation
-]
-
-#slide[
-  = Forward mode in 10 lines
-
-  ```julia
-  import Base: +, *
-
-  struct Dual; val; der; end
-
-  +(x::Dual, y::Dual) = Dual(x.val + y.val, x.der + y.der)
-  *(x::Dual, y::Dual) = Dual(x.val * y.val, x.der * y.val + x.val * y.der)
-  *(x, y::Dual) = Dual(x, 0) * y
-  ```
-
-  Does it work?
-
-  ```julia
-  julia> f(x) = 1 + 2 * x + 3 * x * x;
-
-  julia> f(Dual(4, 1))
-  Dual(57, 26)
-  ```
 ]
 
 #slide[
@@ -219,7 +234,81 @@
     )
   ]
 
+]
 
+
+#slide[
+  = Pocket AD, chain rule version
+
+  #only(1)[
+    ```julia
+    # Basic rules
+
+    using LinearAlgebra
+
+    A, b = rand(2, 3), rand(2)
+    residuals(x) = A * x - b
+    ∂(::typeof(residuals)) = x -> (u -> A * u)  # ℝ³ → ℝ²
+    ∂ᵀ(::typeof(residuals)) = x -> (v -> adjoint(A) * v)  # ℝ² → ℝ³
+
+    sqnorm(r) = sum(abs2, r)
+    ∂(::typeof(sqnorm)) = r -> (v -> dot(2r, v))  # ℝ² → ℝ
+    ∂ᵀ(::typeof(sqnorm)) = r -> (w -> 2r .* w)  # ℝ → ℝ²
+    ```
+  ]
+
+  #only(2)[
+    ```julia
+    # Composition
+
+    function ∂(f::ComposedFunction)
+        g, h = f.outer, f.inner
+        return x -> ∂(g)(h(x)) ∘ ∂(h)(x)
+    end
+
+    function ∂ᵀ(f::ComposedFunction)
+        g, h = f.outer, f.inner
+        return x -> ∂ᵀ(h)(x) ∘ ∂ᵀ(g)(h(x))
+    end
+    ```
+  ]
+
+  #only(3)[
+    ```julia
+    julia> import ForwardDiff as FD, Zygote
+
+    julia> f = sqnorm ∘ residuals;
+
+    julia> x, Δx = rand(3), [1, 0, 0];
+    ```
+    #set text(size: 16pt)
+
+#v(10%)
+
+    #toolbox.side-by-side[
+      ```julia
+      julia> ∂(f)(x)(Δx)  # partial derivative
+      0.8691056836969242
+
+      julia> ∂ᵀ(f)(x)(1)  # gradient
+      3-element Vector{Float64}:
+       0.8691056836969242
+       0.9973491983376236
+       0.5768822265195823
+      ```
+    ][
+      ```julia
+      julia> FD.derivative(t -> f(x + t * Δx), 0)
+      0.8691056836969242
+
+      julia> Zygote.gradient(f, x)[1]
+      3-element Vector{Float64}:
+       0.8691056836969242
+       0.9973491983376236
+       0.5768822265195823
+      ```
+    ]
+  ]
 ]
 
 #new-section[Exploiting sparsity]
@@ -228,7 +317,7 @@
   = From maps to matrices
   To compute the Jacobian matrix $J$ of a composition $f: bb(R)^m arrow.long bb(R)^n$:
   - #strike[product of intermediate Jacobian matrices]
-  - reconstruction from JVPs or VJPs
+  - reconstruction from several JVPs or VJPs
 
   #align(center)[
     #table(
@@ -258,8 +347,8 @@
 
   Once we have grouped columns, sparse AD has two steps:
 
-  1. compressed differentiation of each group $c = {j_1, dots, j_k}$
-  2. decompression into individual columns $j_1, dots, j_k$
+  3. one JVP for each group $c = {j_1, dots, j_k}$
+  4. decompression into individual columns $j_1, dots, j_k$
 ]
 
 #slide[
@@ -320,44 +409,44 @@
 ]
 
 #slide[
-  = Pattern detection in 10 lines
+  = Pocket pattern detection
 
-  ```julia
-  import Base: +, *, /, sign
+  #only(1)[
+    ```julia
+    import Base: +, *, /, sign
 
-  struct Tracer
-  	indices::Set{Int}
-  end
+    struct Tracer
+    	indices::Set{Int}
+    end
 
-  Tracer() = Tracer(Set{Int}())
+    Tracer() = Tracer(Set{Int}())
 
-  +(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
-  *(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
-  /(a::Tracer, b) = Tracer(a.indices)
-  sign(a::Tracer) = Tracer()
-  ```
-]
+    +(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
+    *(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
+    /(a::Tracer, b) = Tracer(a.indices)
+    sign(a::Tracer) = Tracer()  # zero derivatives
+    ```
+  ]
+  #only(2)[
 
-#slide[
-  = Pattern detection in 10 lines (2)
+    Does it work?
 
-  Does it work?
+    ```julia
+    julia> f(x) = [x[1] * x[2] * sign(x[3]), sign(x[3]) * x[4] / 2];
 
-  ```julia
-  julia> f(x) = [x[1] * x[2] * sign(x[3]), sign(x[3]) * x[4] / 2];
+    julia> x = Tracer.(Set.([1, 2, 3, 4]))
+    4-element Vector{Tracer}:
+     Tracer(Set([1]))
+     Tracer(Set([2]))
+     Tracer(Set([3]))
+     Tracer(Set([4]))
 
-  julia> x = Tracer.(Set.([1, 2, 3, 4]))
-  4-element Vector{Tracer}:
-   Tracer(Set([1]))
-   Tracer(Set([2]))
-   Tracer(Set([3]))
-   Tracer(Set([4]))
-
-  julia> f(x)
-  2-element Vector{Tracer}:
-   Tracer(Set([2, 1]))
-   Tracer(Set([4]))
-  ```
+    julia> f(x)
+    2-element Vector{Tracer}:
+     Tracer(Set([2, 1]))
+     Tracer(Set([4]))
+    ```
+  ]
 ]
 
 #slide[
@@ -397,43 +486,45 @@
 #slide[
   = Hessian coloring
 
-  Star coloring of adjacency graph
-  #figure(
-    image("../assets/img/survey/star_coloring3.png", width: 90%),
-    caption: cite(<gebremedhinEfficientComputationSparse2009>, form: "prose"),
-  )
-]
+  #only(1)[
 
-#slide[
-  = Hessian coloring (2)
+    Star coloring of adjacency graph
+    #figure(
+      image("../assets/img/survey/star_coloring3.png", width: 90%),
+      caption: cite(<gebremedhinEfficientComputationSparse2009>, form: "prose"),
+    )
+  ]
 
-  #columns(2)[
-    Why a "star" coloring#footnote(cite(<colemanEstimationSparseHessian1984>, form: "prose"))? Consider
+  #only(2)[
 
-    $
-      A = mat(
+    #columns(2)[
+      Why a "star" coloring#footnote(cite(<colemanEstimationSparseHessian1984>, form: "prose"))? Consider
+
+      $
+        A = mat(
         A_(k k), A_(k i), dot, dot;
         A_(i k), A_(i i), A_(i j), dot;
         dot, A_(j i), A_(j j), A_(j l);
         dot, dot, A_(l j), A_(l l);
       )
-    $
+      $
 
-    #colbreak()
+      #colbreak()
 
-    If coloring $c$ yields a symmetrically orthogonal partition:
+      If coloring $c$ yields a symmetrically orthogonal partition:
 
-    - $c(i) != c(j)$
-    - $c(i) != c(k)$
-    - $c(j) != c(l)$
+      - $c(i) != c(j)$
+      - $c(i) != c(k)$
+      - $c(j) != c(l)$
+    ]
+
+    Any path on 4 vertices $(i, j, k, l)$ must use at least 3 colors
+    $arrow.l.r.double.long$ any 2-colored subgraph is a collection of disjoint stars (it contains no path longer than 3).
   ]
-
-  Any path on 4 vertices $(i, j, k, l)$ must use at least 3 colors
-  $arrow.l.r.double.long$ any 2-colored subgraph is a collection of disjoint stars (it contains no path longer than 3).
 ]
 
 #slide[
-  = Jacobian bi-coloring
+  = Jacobian bicoloring
 
   Bidirectional coloring of bipartite graph, with neutral color
   #figure(
@@ -443,7 +534,7 @@
 ]
 
 #slide[
-  = Bi-coloring from symmetric coloring [new]
+  = Bicoloring from symmetric coloring [new]
 
   To color the rows and columns of $J$, color the columns of $H = mat(
     0, J;
@@ -457,7 +548,52 @@
   - Efficient decompression requires lots of preprocessing
 ]
 
+#slide[
+  = The sharp bits
+
+  #toolbox.side-by-side[
+    *Pattern detection*
+
+    - Linear versus nonlinear interactions
+    - Local versus global sparsity
+  ][
+    *Coloring*
+
+    - Only heuristic algorithms
+    - Vertex ordering matters a lot
+  ]
+]
+
 #new-section[Implementation]
+
+#slide[
+  = AD in Python & Julia
+
+  #only(1)[
+    #figure(image("../assets/img/juliacon/python_julia_user.png", width: 100%))
+  ]
+  #only(2)[
+    #figure(image("../assets/img/juliacon/python_julia_dev.png", width: 95%))
+  ]
+]
+
+#slide[
+  = Interfaces for experimenting [new]
+
+  #toolbox.side-by-side[
+    #figure(
+      image("../assets/img/misc/keras.jpg"),
+      caption: [In Python, #link("https://keras.io/")[`Keras`] supports Tensorflow, PyTorch and JAX.],
+    )
+  ][
+    #figure(
+      image("../assets/img/logo.svg", width: 55%),
+      caption: [In Julia, 14 AD backends inside #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`Differentiationterface.jl`]],
+    )
+  ]
+
+  Once we have a common syntax, we can do more!
+]
 
 #slide[
   = Previous implementations of sparse AD
@@ -466,9 +602,9 @@
   - In closed-source languages (Matlab)
   - In domain-specific languages (AMPL, CasADi)
 
-  Nothing in Python (either in JAX or PyTorch).
+  Basically nothing in Python (either in JAX or PyTorch).
 
-  First drafts in Julia#footnote(cite(<bezansonJuliaFreshApproach2017>, form:"prose")) for scientific machine learning, but severely limited.
+  First drafts in Julia for scientific machine learning, but severely limited: single-backend, slow.
 ]
 
 #slide[
@@ -496,6 +632,8 @@
       [downloads / month], [4.2k], [16k], [20k],
     )
   ]
+
+  Compatible with generic code!
 ]
 
 #slide[
