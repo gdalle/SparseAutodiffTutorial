@@ -42,13 +42,13 @@
 
     Solve $F(x) = 0$ by iterating
 
-    $ x_(t+1) = x_t - underbrace([partial F(x_t)], "jacobian")^(-1) F(x_t) $
+    $ x_(t+1) = x_t - underbrace([partial F(x_t)], "Jacobian")^(-1) F(x_t) $
   ][
     *Optimization*
 
     Solve $min_x f(x)$ by iterating
 
-    $ x_(t+1) = x_t - underbrace([nabla^2 f(x_t)], "hessian")^(-1) nabla f(x_t) $
+    $ x_(t+1) = x_t - underbrace([nabla^2 f(x_t)], "Hessian")^(-1) nabla f(x_t) $
   ]
 
   *Linear system* involving a derivative matrix $A$.
@@ -61,10 +61,10 @@
 
   Applications: fixed-point iterations, optimization problems.
 
-  Implicit function theorem
+  Implicit function theorem:
 
   $ partial / (partial x) c(x, y(x)) + partial / (partial y) c(x, y(x)) dot partial y(x) = 0 $
-  $ partial y(x) = -underbrace([partial / (partial y) c(x, y(x))], "jacobian")^(-1) partial / (partial x) c(x, y(x)) $
+  $ partial y(x) = -underbrace([partial / (partial y) c(x, y(x))], "Jacobian")^(-1) partial / (partial x) c(x, y(x)) $
 
   *Linear system* involving a derivative matrix $A$.
 ]
@@ -119,6 +119,16 @@
 #new-section[Automatic differentiation]
 
 #slide[
+  = Differentiation
+
+  Given $f : bb(R)^n arrow bb(R)^m$, its *differential* $partial f(x)$ is the *linear map* that best approximates $f$ around $x$:
+
+  $ f(x + u) = f(x) + partial f(x)[u] + o(u) $
+
+  It can be represented by the Jacobian *matrix*, which I will denote by $partial_"mat" f(x)$ instead.
+]
+
+#slide[
   = Numeric differentiation
 
   #align(center)[
@@ -127,12 +137,12 @@
       inset: 10pt,
       align: center,
       table.header(
-        [*Input*],
-        [*Output*],
+        [*input*],
+        [*output*],
       ),
 
       [program computing the function $ x mapsto f(x) $],
-      [approximate value of the directional derivative $ (f(x + epsilon d) - f(x)) / epsilon $],
+      [approximation of the differential with the same program $ partial f(x)[u] approx (f(x + epsilon u) - f(x)) / epsilon $],
     )
   ]
 ]
@@ -146,16 +156,15 @@
       inset: 10pt,
       align: center,
       table.header(
-        [*Input*],
-        [*Output*],
+        [*input*],
+        [*output*],
       ),
 
       [program computing the function $ x mapsto f(x) $],
-      [program computing the differential $ x mapsto partial f(x) $ which is a linear map $ partial f(x) : u arrow.r.bar partial f(x) [u] $],
+      [new program computing the exact differential $ (x, u) mapsto partial f(x)[u] space "or" partial f(x)^*[u] $],
     )
   ]
 
-  When talking about Jacobian matrices, I will write $partial_"mat" f(x)$ instead.
 ]
 
 #slide[
@@ -277,13 +286,13 @@
 #slide[
   = Two modes
 
-  Forward-mode AD computes Jacobian-Vector Products (JVPs) = "pushforward" of an input perturbation:
+  Forward-mode AD computes Jacobian-Vector Products (*JVPs*) = "pushforward" of an *input perturbation*:
 
   $ u mapsto partial f(x)[u] = J u $
 
-  Reverse-mode AD computes Vector-Jacobian Products (VJPs) = "pullback" of an output sensitivity:
+  Reverse-mode AD computes Vector-Jacobian Products (*VJPs*) = "pullback" of an *output sensitivity*:
 
-  $ v mapsto quad & partial f(x)^* [v] = J^T v = v^T J $
+  $ v mapsto partial f(x)^* [v] = J^T v = v^T J $
 
 ]
 
@@ -296,7 +305,7 @@
   = What about gradients?
 
   #toolbox.side-by-side[
-    Reverse mode computes gradients for roughly the same cost as the function itself:
+    Reverse mode computes *gradients for roughly the same cost* as the function itself:
 
     $ nabla f(x) = partial f(x)^* [1] $
 
@@ -312,11 +321,11 @@
 ]
 
 #slide[
-  = What about second-order?
+  = What about second order?
 
   The Hessian matrix is the Jacobian matrix of the gradient function.
 
-  A Hessian-Vector Product (HVP) can be computed as the JVP of a VJP, in *forward-over-reverse mode*:
+  A Hessian-Vector Product (HVP) can be computed as the JVP of a VJP, in *forward-over-reverse mode*#footnote(cite(<pearlmutterFastExactMultiplication1994>, form: "prose")):
 
   $ nabla^2 f(x)[v] = partial (nabla f)(x)[v] = partial (partial^* f(x)[1]) [v] $
 
@@ -343,7 +352,7 @@
 
       [idea], [1 JVP gives 1 column], [1 VJP gives 1 row],
       [formula], [$ J_(dot, j) = partial f(x)[e_j] $], [$ J_(i, dot) = partial f(x)^*[e_i] $],
-      [cost], [$n$ JVPs (input dimension)], [$m$ JVPs (output dimension)],
+      [cost], [$n$ JVPs (input dimension)], [$m$ VJPs (output dimension)],
     )
   ]
 ]
@@ -351,9 +360,9 @@
 #slide[
   = Using fewer products
 
-  When the Jacobian is sparse, we can compute it faster.
+  When the Jacobian is sparse, we can compute it faster#footnote(cite(<curtisEstimationSparseJacobian1974>, form: "prose")).
 
-  If columns $j_1, dots, j_k$ of $J$ are structurally orthogonal (their nonzeros never overlap), we deduce them all from a single JVP:
+  If columns $j_1, dots, j_k$ of $J$ are structurally *orthogonal* (their nonzeros never overlap), we deduce them all from a single JVP:
   $ J_(j_1) + dots + J_(j_k) = partial f(x)[e_(j_1) + dots + e_(j_k)] $
 
   Once we have grouped columns, sparse AD has two steps:
@@ -363,21 +372,12 @@
 ]
 
 #slide[
-  = The gist in one slide
-
-  #figure(
-    image("../assets/img/paper/fig1.png", width: 100%),
-    caption: cite(<hillSparserBetterFaster2025>, form: "prose"),
-  )
-]
-
-#slide[
   = Two preliminary steps
 
   When grouping columns, we want to
 
-  - guarantee structural orthogonality (correctness)
-  - form the smallest number of groups (efficiency)
+  - guarantee orthogonality (correctness) $arrow.r.double$ pattern detection
+  - form the smallest number of groups (efficiency) $arrow.r.double$ coloring
 
   #align(center)[
     #table(
@@ -400,20 +400,36 @@
     )
   ]
 
-  The preparation phase can be amortized across several inputs.
+  The preparation phase can be *amortized* across several inputs.
+]
+
+#slide[
+  = The gist in one slide
+
+  #figure(
+    image("../assets/img/paper/fig1.png", width: 100%),
+    caption: cite(<hillSparserBetterFaster2025>, form: "prose"),
+  )
 ]
 
 #slide[
   = Tracing dependencies in the computation graph
 
   #columns(2)[
-    #image("../assets/img/blog/compute_graph.png", width: 100%)
+    #figure(image("../assets/img/blog/compute_graph.png", width: 100%))
 
     #colbreak()
 
     Computation graph for $ y_1 &= x_1 x_2 + "sign"(x_3) \ y_2 &= "sign"(x_3) times (x_4 / 2) $
 
-    Its Jacobian will have 3 nonzero coefficients.
+    Its Jacobian matrix will have 3 nonzero coefficients:
+
+    $
+      mat(
+        1, 1, 0, 0;
+        0, 0, 0, 1;
+      )
+    $
   ]
 ]
 
@@ -432,13 +448,11 @@
 
     +(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
     *(a::Tracer, b::Tracer) = Tracer(a.indices ∪ b.indices)
-    /(a::Tracer, b) = Tracer(a.indices)
+    /(a::Tracer, b::Real) = Tracer(a.indices)
     sign(a::Tracer) = Tracer()  # zero derivatives
     ```
   ]
   #only(2)[
-
-    Does it work?
 
     ```julia
     julia> f(x) = [x[1] * x[2] * sign(x[3]), sign(x[3]) * x[4] / 2];
@@ -459,32 +473,27 @@
 ]
 
 #slide[
-  = Partitions of a matrix
+  = Coloring for Jacobians
 
-  / Orthogonal: for all $(i, j)$ s.t. $A_(i j) != 0$,
-    - column $j$ is alone in group $c(j)$ with a nonzero in row $i$
-  / Symmetrically orthogonal: for all $(i, j)$ s.t. $A_(i j) != 0$,
-    - either column $j$ is alone in group $c(j)$ with a nonzero in row $i$
-    - or column $i$ is alone in group $c(i)$ with a nonzero in row $j$
+  #toolbox.side-by-side[
+    *Matrix problem*
 
-  Each partition can be reformulated as a specific coloring problem#footnote(cite(<gebremedhinWhatColorYour2005>, form: "prose")).
+    Orthogonal partition of the columns of $A$.
+
+    If $A_(i j_1) != 0$ and $A_(i, j_2) != 0$, then columns $j_1$ and $j_2$ are in different groups $c(j_1) != c(j_2)$
+  ][
+    *Graph problem*
+
+    Partial distance-2 coloring of a bipartite graph $cal(G) = (cal(I) union cal(J), cal(E))$
+
+    If $(i, j_1) in cal(E)$ and $(i, j_2) in cal(E)$, then vertices $j_1$ and $j_2$ have different colors $c(j_1) != c(j_2)$.
+  ]
+
+  These are equivalent#footnote(cite(<gebremedhinWhatColorYour2005>, form: "prose")) if we define the graph representation $ cal(E) = {(i, j) in cal(I) times cal(J): A_(i, j) != 0} $
 ]
 
 #slide[
-  = Graph representations of a matrix
-
-  / Column intersection: $(j_1, j_2) in cal(E) arrow.l.r.double.long exists i, A_(i j_1) != 0 "and" A_(i j_2) != 0$
-  / Bipartite: $(i, j) in cal(E) arrow.l.r.double.long A_(i j) != 0$ (2 vertex sets $cal(I)$ and $cal(J)$)
-  / Adjacency (sym.): $(i, j) in cal(E) arrow.l.r.double.long i != j$ & $A_(i j) != 0$
-  #figure(
-    image("../assets/img/survey/bipartite_column_2.png", width: 80%),
-    caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
-  )
-]
-
-#slide[
-  = Jacobian coloring
-
+  = Coloring for Jacobians, illustrated
   Coloring of intersection graph / distance-2 coloring of bipartite graph
   #figure(
     image("../assets/img/survey/bipartite_column_full.png", width: 100%),
@@ -493,57 +502,49 @@
 ]
 
 #slide[
-  = Hessian coloring
+  = Coloring for Hessians
 
-  #only(1)[
+  What if our matrix has structure, like $A_(i, j) = A_(j, i)$?
 
-    Star coloring of adjacency graph
-    #figure(
-      image("../assets/img/survey/star_coloring3.png", width: 90%),
-      caption: cite(<gebremedhinEfficientComputationSparse2009>, form: "prose"),
-    )
-  ]
+  We can compute a slightly different coloring#footnote(cite(<colemanEstimationSparseHessian1984>, form: "prose")) with fewer colors.
 
-  #only(2)[
+  #figure(image("../assets/img/coloring_paper/star_coloring.png", width: 50%))
+]
 
-    #columns(2)[
-      Why a "star" coloring#footnote(cite(<colemanEstimationSparseHessian1984>, form: "prose"))? Consider
+#slide[
+  = Coloring for bidirectional Jacobians
 
-      $
-        A = mat(
-          A_(k k), A_(k i), dot, dot;
-          A_(i k), A_(i i), A_(i j), dot;
-          dot, A_(j i), A_(j j), A_(j l);
-          dot, dot, A_(l j), A_(l l);
-        )
-      $
+  What if the columns are not orthogonal enough?
 
-      #colbreak()
+  We can use both rows and columns#footnote(cite(<colemanEfficientComputationSparse1998>, form: "prose")) inside our coloring.
 
-      If coloring $c$ yields a symmetrically orthogonal partition:
+  #figure(image("../assets/img/coloring_paper/star_bicoloring.png", width: 50%))
+]
 
-      - $c(i) != c(j)$
-      - $c(i) != c(k)$
-      - $c(j) != c(l)$
+#slide[
+  = Benefits of bidirectional coloring
+
+  Compute Jacobians with a dense row *and* a dense column, using forward-mode AD + reverse-mode AD.
+
+  #toolbox.side-by-side[
+    #set align(center)
+    #image("../assets/img/coloring_paper/row.png", width: 50%)
+    #image("../assets/img/coloring_paper/col.png", width: 50%)
+    Unidirectional
+  ][
+    #set align(center)
+    #toolbox.side-by-side[
+      #image("../assets/img/coloring_paper/birow.png", width: 80%)
+    ][
+      #image("../assets/img/coloring_paper/bicol.png", width: 80%)
     ]
-
-    Any path on 4 vertices $(i, j, k, l)$ must use at least 3 colors
-    $arrow.l.r.double.long$ any 2-colored subgraph is a collection of disjoint stars (it contains no path longer than 3).
+    #image("../assets/img/coloring_paper/bi.png", width: 60%)
+    Bidirectional
   ]
 ]
 
 #slide[
-  = Jacobian bicoloring
-
-  Bidirectional coloring of bipartite graph, with neutral color
-  #figure(
-    image("../assets/img/survey/bicoloring.png", width: 80%),
-    caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
-  )
-]
-
-#slide[
-  = Bicoloring from symmetric coloring [new]
+  = From bidirectional to symmetric [new]
 
   To color the rows and columns of $J$, color the columns of $H = mat(
     0, J;
@@ -604,6 +605,8 @@
 
 #slide[
   = One API to rule them all
+
+  Decouple the scientific libraries from the AD underneath.
 
   #figure(image("../assets/img/di.png", width: 95%))
 ]
@@ -696,6 +699,8 @@
 
   - #cite(<gebremedhinWhatColorYour2005>, form: "prose")
   - #cite(<griewankEvaluatingDerivativesPrinciples2008>, form: "prose")
+  - #cite(<hillIllustratedGuideAutomatic2025>, form: "prose")
+
 ]
 
 #slide[

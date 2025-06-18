@@ -80,6 +80,22 @@
   url = {http://github.com/google/jax}
 }
 
+@article{colemanEfficientComputationSparse1998,
+  title = {The {{Efficient Computation}} of {{Sparse Jacobian Matrices Using Automatic Differentiation}}},
+  author = {Coleman, Thomas F. and Verma, Arun},
+  year = {1998},
+  month = jan,
+  journal = {SIAM Journal on Scientific Computing},
+  volume = {19},
+  number = {4},
+  pages = {1210--1233},
+  publisher = {{Society for Industrial and Applied Mathematics}},
+  issn = {1064-8275},
+  doi = {10.1137/S1064827595295349},
+  url = {https://epubs.siam.org/doi/abs/10.1137/S1064827595295349},
+  abstract = {The computation of large sparse Jacobian matrices is required in many important large-scale scientific problems. Three approaches to computing such matrices are considered: hand-coding, difference approximations, and automatic differentiation using the ADIFOR (automatic differentiation in Fortran) tool. The authors compare the numerical reliability and computational efficiency of these approaches on applications from the MINPACK-2 test problem collection. The conclusion is that ADIFOR is the method of choice, leading to results that are as accurate as hand-coded derivatives, while at the same time outperforming difference approximations in both accuracy and speed.}
+}
+
 @article{colemanEstimationSparseHessian1984,
   title = {Estimation of Sparse Hessian Matrices and Graph Coloring Problems},
   author = {Coleman, Thomas F. and Mor{\'e}, Jorge J.},
@@ -348,6 +364,21 @@
   publisher = {Curran Associates, Inc.},
   url = {https://proceedings.neurips.cc/paper/2019/hash/bdbca288fee7f92f2bfa9f7012727740-Abstract.html},
   abstract = {Deep learning frameworks have often focused on either usability or speed, but not both. PyTorch is a machine learning library that shows that these two goals are in fact compatible: it was designed from first principles to support an imperative and Pythonic programming style that supports code as a model, makes debugging easy and is consistent with other popular scientific computing libraries, while remaining efficient and supporting hardware accelerators such as GPUs. In this paper, we detail the principles that drove the implementation of PyTorch and how they are reflected in its architecture. We emphasize that every aspect of PyTorch is a regular Python program under the full control of its user. We also explain how the careful and pragmatic implementation of the key components of its runtime enables them to work together to achieve compelling performance. We demonstrate the efficiency of individual subsystems, as well as the overall speed of PyTorch on several commonly used benchmarks.}
+}
+
+@article{pearlmutterFastExactMultiplication1994,
+  title = {Fast {{Exact Multiplication}} by the {{Hessian}}},
+  author = {Pearlmutter, Barak A.},
+  year = {1994},
+  month = jan,
+  journal = {Neural Computation},
+  volume = {6},
+  number = {1},
+  pages = {147--160},
+  issn = {0899-7667},
+  doi = {10.1162/neco.1994.6.1.147},
+  url = {https://ieeexplore.ieee.org/abstract/document/6796137},
+  abstract = {Just storing the Hessian H (the matrix of second derivatives {$\delta$}2E/{$\delta$}wi{$\delta$}wj of the error E with respect to each pair of weights) of a large neural network is difficult. Since a common use of a large matrix like H is to compute its product with various vectors, we derive a technique that directly calculates Hv, where v is an arbitrary vector. To calculate Hv, we first define a differential operator Rvf(w) = ({$\delta$}/{$\delta$}r)f(w + rv){\textbar}r=0, note that Rv{$\bigtriangledown$}w = Hv and Rvw = v, and then apply Rv{$\cdot$} to the equations used to compute {$\bigtriangledown$}w. The result is an exact and numerically stable procedure for computing Hv, which takes about as much computation, and is about as local, as a gradient evaluation. We then apply the technique to a one pass gradient calculation algorithm (backpropagation), a relaxation gradient calculation algorithm (recurrent backpropagation), and two stochastic gradient calculation algorithms (Boltzmann machines and weight perturbation). Finally, we show that this technique can be used at the heart of many iterative techniques for computing various properties of H, obviating any need to calculate the full Hessian.}
 }
 
 @misc{sapienzaDifferentiableProgrammingDifferential2024,
