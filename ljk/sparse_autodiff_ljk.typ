@@ -121,11 +121,11 @@
 #slide[
   = Differentiation
 
-  Given $f : bb(R)^n arrow bb(R)^m$, its *differential* $partial f(x)$ is the *linear map* that best approximates $f$ around $x$:
+  Given $f : bb(R)^n arrow bb(R)^m$, its *differential* $partial f(x)$ is the *linear map* which best approximates $f$ around $x$:
 
   $ f(x + u) = f(x) + partial f(x)[u] + o(u) $
 
-  It can be represented by the Jacobian *matrix*, which I will denote by $partial_"mat" f(x)$ instead.
+  It can be represented by the *Jacobian matrix*, which I will denote by $J = partial_"mat" f(x)$ instead.
 ]
 
 #slide[
@@ -206,8 +206,56 @@
 
   Working with linear maps avoids allocation and manipulation of *intermediate Jacobian matrices*.
 
-  Essential for neural networks!
+  Essential for neural networks (scalar output but vector encodings)!
 ]
+
+#slide[
+  = Two modes
+
+  Forward-mode AD computes Jacobian-Vector Products (*JVPs*) = "pushforward" of an *input perturbation*:
+
+  $ u mapsto partial f(x)[u] = J u space.quad "with" space.quad J = partial_"mat" f(x) $
+
+  Reverse-mode AD computes Vector-Jacobian Products (*VJPs*) = "pullback" of an *output sensitivity*:
+
+  $ v mapsto partial f(x)^* [v] = J^T v = v^T J space.quad "with" space.quad J = partial_"mat" f(x) $
+
+]
+
+#slide[
+  #show: focus
+  Theorem (Baur-Strassen): cost of 1 JVP or VJP $prop$ cost of 1 function evaluation
+]
+
+#slide[
+  = What about gradients?
+
+  #toolbox.side-by-side[
+    Reverse mode computes *gradients for roughly the same cost* as the function itself:
+
+    $ nabla f(x) = partial f(x)^* [1] $
+
+    Makes deep learning possible.
+
+    The devil is in the details: higher memory footprint.
+  ][
+    #set align(center)
+    #image("../assets/img/book/reverse_memory.png")
+    #cite(<blondelElementsDifferentiableProgramming2024>, form: "prose")
+  ]
+]
+
+#slide[
+  = What about second order?
+
+  The Hessian matrix is the Jacobian matrix of the gradient function.
+
+  A Hessian-Vector Product (HVP) can be computed as the JVP of a VJP, in *forward-over-reverse mode*#footnote(cite(<pearlmutterFastExactMultiplication1994>, form: "prose")):
+
+  $ nabla^2 f(x)[v] = partial (nabla f)(x)[v] = partial (partial^* f(x)[1]) [v] $
+
+]
+
 
 #slide[
   = Pocket AD
@@ -251,7 +299,7 @@
 
     julia> f = sqnorm ∘ residuals;
 
-    julia> x, Δx = rand(3), [1, 0, 0];
+    julia> x, u = rand(3), [1, 0, 0];
     ```
     #set text(size: 16pt)
 
@@ -259,7 +307,7 @@
 
     #toolbox.side-by-side[
       ```julia
-      julia> ∂(f)(x)(Δx)  # partial derivative
+      julia> ∂(f)(x)(u)  # directional derivative
       0.8691056836969242
 
       julia> ∂ᵀ(f)(x)(1)  # gradient
@@ -270,7 +318,7 @@
       ```
     ][
       ```julia
-      julia> FD.derivative(t -> f(x + t * Δx), 0)
+      julia> FD.derivative(t -> f(x + t * u), 0)
       0.8691056836969242
 
       julia> Zygote.gradient(f, x)[1]
@@ -281,54 +329,6 @@
       ```
     ]
   ]
-]
-
-#slide[
-  = Two modes
-
-  Forward-mode AD computes Jacobian-Vector Products (*JVPs*) = "pushforward" of an *input perturbation*:
-
-  $ u mapsto partial f(x)[u] = J u $
-
-  Reverse-mode AD computes Vector-Jacobian Products (*VJPs*) = "pullback" of an *output sensitivity*:
-
-  $ v mapsto partial f(x)^* [v] = J^T v = v^T J $
-
-]
-
-#slide[
-  #show: focus
-  Theorem (Baur-Strassen): cost of 1 JVP or VJP $prop$ cost of 1 function evaluation
-]
-
-#slide[
-  = What about gradients?
-
-  #toolbox.side-by-side[
-    Reverse mode computes *gradients for roughly the same cost* as the function itself:
-
-    $ nabla f(x) = partial f(x)^* [1] $
-
-    Makes deep learning possible.
-
-    The devil is in the details: higher memory footprint.
-  ][
-    #figure(
-      image("../assets/img/book/reverse_memory.png"),
-      caption: [#cite(<blondelElementsDifferentiableProgramming2024>, form: "prose")],
-    )
-  ]
-]
-
-#slide[
-  = What about second order?
-
-  The Hessian matrix is the Jacobian matrix of the gradient function.
-
-  A Hessian-Vector Product (HVP) can be computed as the JVP of a VJP, in *forward-over-reverse mode*#footnote(cite(<pearlmutterFastExactMultiplication1994>, form: "prose")):
-
-  $ nabla^2 f(x)[v] = partial (nabla f)(x)[v] = partial (partial^* f(x)[1]) [v] $
-
 ]
 
 #new-section[Leveraging sparsity]
@@ -406,20 +406,19 @@
 #slide[
   = The gist in one slide
 
-  #figure(
-    image("../assets/img/paper/fig1.png", width: 100%),
-    caption: cite(<hillSparserBetterFaster2025>, form: "prose"),
-  )
+  #set align(center)
+  #image("../assets/img/paper/fig1.png", width: 90%)
+  #cite(<hillSparserBetterFaster2025>, form: "prose")
 ]
 
 #slide[
   = Tracing dependencies in the computation graph
 
-  #columns(2)[
-    #figure(image("../assets/img/blog/compute_graph.png", width: 100%))
-
-    #colbreak()
-
+  #toolbox.side-by-side[
+    #set align(center)
+    #image("../assets/img/blog/compute_graph.png", width: 100%)
+    #cite(<hillIllustratedGuideAutomatic2025>, form: "prose")
+  ][
     Computation graph for $ y_1 &= x_1 x_2 + "sign"(x_3) \ y_2 &= "sign"(x_3) times (x_4 / 2) $
 
     Its Jacobian matrix will have 3 nonzero coefficients:
@@ -495,10 +494,10 @@
 #slide[
   = Coloring for Jacobians, illustrated
   Coloring of intersection graph / distance-2 coloring of bipartite graph
-  #figure(
-    image("../assets/img/survey/bipartite_column_full.png", width: 100%),
-    caption: cite(<gebremedhinWhatColorYour2005>, form: "prose"),
-  )
+
+  #set align(center)
+  #image("../assets/img/survey/bipartite_column_full.png", width: 90%)
+  #cite(<gebremedhinWhatColorYour2005>, form: "prose")
 ]
 
 #slide[
@@ -508,7 +507,8 @@
 
   We can compute a slightly different coloring#footnote(cite(<colemanEstimationSparseHessian1984>, form: "prose")) with fewer colors.
 
-  #figure(image("../assets/img/coloring_paper/star_coloring.png", width: 50%))
+  #set align(center)
+  #image("../assets/img/coloring_paper/star_coloring.png", width: 50%)
 ]
 
 #slide[
@@ -518,7 +518,8 @@
 
   We can use both rows and columns#footnote(cite(<colemanEfficientComputationSparse1998>, form: "prose")) inside our coloring.
 
-  #figure(image("../assets/img/coloring_paper/star_bicoloring.png", width: 50%))
+  #set align(center)
+  #image("../assets/img/coloring_paper/star_bicoloring.png", width: 50%)
 ]
 
 #slide[
@@ -581,26 +582,24 @@
 
 #slide[
   = AD in Python & Julia
-
-  #figure(image("../assets/img/juliacon/python_julia_user.png", width: 100%))
+  #set align(center)
+  #image("../assets/img/juliacon/python_julia_user.png", width: 90%)
 ]
 
 #slide[
   = Interfaces for experimenting [new]
 
+  Once we have a common syntax, we can do more!
+
   #toolbox.side-by-side[
-    #figure(
-      image("../assets/img/misc/keras.jpg"),
-      caption: [In Python, #link("https://keras.io/")[`Keras`] supports Tensorflow, PyTorch and JAX.],
-    )
+    #image("../assets/img/misc/keras.jpg")
+    In Python, #link("https://keras.io/")[`Keras`] supports Tensorflow, PyTorch and JAX.
   ][
-    #figure(
-      image("../assets/img/logo.svg", width: 55%),
-      caption: [In Julia, 14 AD backends inside #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`Differentiationterface.jl`]],
-    )
+    #set align(center)
+    #image("../assets/img/logo.svg", width: 55%)
+    In Julia, 14 AD backends inside #link("https://github.com/JuliaDiff/DifferentiationInterface.jl")[`Differentiationterface.jl`]
   ]
 
-  Once we have a common syntax, we can do more!
 ]
 
 #slide[
@@ -608,7 +607,9 @@
 
   Decouple the scientific libraries from the AD underneath.
 
-  #figure(image("../assets/img/di.png", width: 95%))
+  #set align(center)
+  #image("../assets/img/di.png", width: 95%)
+  #cite(<dalleCommonInterfaceAutomatic2025>, form: "prose")
 ]
 
 #slide[
@@ -655,21 +656,21 @@
 #slide[
   = Impact
 
-  Users already include...
+  #toolbox.side-by-side[
+    Users already include...
 
-  - Scientific computing: #link("https://sciml.ai/")[`SciML`] (Julia's `scipy`)
-    - Differential equations
-    - Nonlinear solvers
-    - Optimization
-  - Probabilistic programming: #link("https://turinglang.org/")[`Turing.jl`]
-  - Symbolic regression: #link("https://github.com/MilesCranmer/PySR")[`PySR`]
+    - Scientific computing: #link("https://sciml.ai/")[`SciML`] (Julia's `scipy`)
+      - Differential equations
+      - Nonlinear solvers
+      - Optimization
+    - Probabilistic programming: #link("https://turinglang.org/")[`Turing.jl`]
+    - Symbolic regression: #link("https://github.com/MilesCranmer/PySR")[`PySR`]
 
-]
-
-#slide[
-  = JAX prototype
-
-
+  ][
+    Python bindings in construction:
+    - #link("https://github.com/gdalle/pysparsematrixcolorings")[`pysparsematrixcolorings`]
+    - #link("https://github.com/gdalle/sparsediffax")[`sparsediffax`]
+  ]
 ]
 
 #slide[
